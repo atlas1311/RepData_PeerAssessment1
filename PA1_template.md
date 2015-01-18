@@ -1,4 +1,10 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: 'Reproducible Research: Peer Assessment 1'
+output:
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+---
 
 
 ## Loading and preprocessing the data
@@ -35,7 +41,7 @@ colnames(activitySumDay) <- c("date", "totalSteps")
 hist(activitySumDay$totalSteps, xlab = "Number of Steps", ylab = "Frequency", main = "Histogram of Number of Steps By Day", breaks = 26, col = c("blue"))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 ###2. Calculate and report the mean and median total number of steps taken per day
 
@@ -61,12 +67,19 @@ median(activitySumDay$totalSteps)
 
 ```r
 library(ggplot2)
+```
+
+```
+## Use suppressPackageStartupMessages to eliminate package startup messages.
+```
+
+```r
 meanSteps <- aggregate(activity$steps, by = list(activity$interval), FUN = mean)
 colnames(meanSteps) <- c("interval", "avgSteps")
 qplot(interval, avgSteps, data = meanSteps, geom = "line", xlab = "5-min Interval", ylab = "Average Number of Steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ###2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -97,6 +110,14 @@ In this case, I thought it would make the most sense to replace the missing data
 
 ```r
 library(data.table)
+```
+
+```
+## data.table 1.9.4  For help type: ?data.table
+## *** NB: by=.EACHI is now explicit. See README to restore previous behaviour.
+```
+
+```r
 meanFillDT <- as.data.table(meanSteps)
 rawDT <- data.table(rawActivity, key = c("steps", "date", "interval"))
 rawDT$date <- as.Date(rawDT$date)
@@ -142,7 +163,7 @@ colnames(activitySumDayNew) <- c("date", "totalSteps")
 hist(activitySumDayNew$totalSteps, xlab = "Number of Steps", ylab = "Frequency", main = "Histogram of Number of Steps By Day", breaks = 26, col = "blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 ```r
 ##New mean and median
@@ -212,7 +233,7 @@ q2 <- qplot(interval, steps, data = weekdayMean, geom = "line", xlab = "5-min In
 grid.arrange(q1, q2, nrow = 2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
 
 With the above graphs you can make clear distinctions in activity across the 24-hour period in the day, with weekends typically showing more activity from 1700-2100. Intuitively, this follows. The typical difference in personal routine between a weekday and weekend day accounts for this pattern - folks are going out on the weekends. 
 
